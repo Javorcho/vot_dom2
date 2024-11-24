@@ -12,10 +12,6 @@ DBeaver (optional, for database management)
 Installation
 Clone the repository:
 
-bash
-Copy code
-git clone https://github.com/your-repo/containerized-quiz-game.git
-cd containerized-quiz-game
 Install Python dependencies:
 
 bash
