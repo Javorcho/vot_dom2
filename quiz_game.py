@@ -1,4 +1,5 @@
 import psycopg2
+from psycopg2 import connect
 
 QUESTIONS_DB_CONFIG = {
     "dbname": "questions_db",
