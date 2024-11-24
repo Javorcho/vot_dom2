@@ -1,18 +1,32 @@
 version: '3.8'
 
 services:
-  db:
+  questions_db:
     image: postgres:15
-    container_name: quiz_game_db
+    container_name: questions_db
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: your_password
-      POSTGRES_DB: quiz_game
+      POSTGRES_PASSWORD: questions_pass
+      POSTGRES_DB: questions_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - questions_data:/var/lib/postgresql/data
+
+  answers_db:
+    image: postgres:15
+    container_name: answers_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: answers_pass
+      POSTGRES_DB: answers_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - answers_data:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  questions_data:
+  answers_data:

@@ -1,41 +1,57 @@
 import psycopg2
 
-DB_CONFIG = {
-    "dbname": "quiz_game",
+QUESTIONS_DB_CONFIG = {
+    "dbname": "questions_db",
     "user": "postgres",
-    "password": "your_password",
+    "password": "questions_pass",
     "host": "localhost",
-    "port": "5432",
+    "port": "5433",
 }
 
+ANSWERS_DB_CONFIG = {
+    "dbname": "answers_db",
+    "user": "postgres",
+    "password": "answers_pass",
+    "host": "localhost",
+    "port": "5434",
+}
 
 def fetch_questions():
-    connection = psycopg2.connect(**DB_CONFIG)
-    cursor = connection.cursor()
-    cursor.execute("SELECT id, question, option_a, option_b, option_c, option_d, correct_option FROM questions;")
+    conn = psycopg2.connect(**QUESTIONS_DB_CONFIG)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, question FROM questions;")
     questions = cursor.fetchall()
-    cursor.close()
-    connection.close()
+    conn.close()
     return questions
 
-def quiz_game():
+def fetch_answers(question_id):
+    conn = psycopg2.connect(**ANSWERS_DB_CONFIG)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT option_a, option_b, option_c, option_d, correct_option FROM answers WHERE question_id = %s;",
+        (question_id,),
+    )
+    answers = cursor.fetchone()
+    conn.close()
+    return answers
+
+def play_quiz():
     questions = fetch_questions()
     score = 0
-
-    print("Welcome to the Quiz Game!\n")
-    for question in questions:
-        _, q_text, opt_a, opt_b, opt_c, opt_d, correct_option = question
-        print(q_text)
-        print(f"A: {opt_a}\nB: {opt_b}\nC: {opt_c}\nD: {opt_d}")
+    for q_id, question in questions:
+        print(f"\n{question}")
+        options = fetch_answers(q_id)
+        print(f"A: {options[0]}")
+        print(f"B: {options[1]}")
+        print(f"C: {options[2]}")
+        print(f"D: {options[3]}")
         answer = input("Your answer (A/B/C/D): ").strip().upper()
-
-        if answer == correct_option:
-            print("Correct!\n")
+        if answer == options[4]:
+            print("Correct!")
             score += 1
         else:
-            print(f"Wrong! The correct answer was {correct_option}.\n")
-
-    print(f"Quiz Over! Your final score is: {score}/{len(questions)}")
+            print(f"Wrong! The correct answer was {options[4]}")
+    print(f"\nQuiz Over! Your score is {score}/{len(questions)}")
 
 if __name__ == "__main__":
-    quiz_game()
+    play_quiz()
