@@ -5,7 +5,7 @@ QUESTIONS_DB_CONFIG = {
     "dbname": "questions_db",
     "user": "postgres",
     "password": "questions_pass",
-    "host": "localhost",
+    "host": "questions_db",
     "port": "5433",
 }
 
@@ -13,7 +13,7 @@ ANSWERS_DB_CONFIG = {
     "dbname": "answers_db",
     "user": "postgres",
     "password": "answers_pass",
-    "host": "localhost",
+    "host": "answers_db",
     "port": "5434",
 }
 
