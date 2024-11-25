@@ -27,6 +27,20 @@ services:
     volumes:
       - answers_data:/var/lib/postgresql/data
 
+  quiz_app:
+    build:
+      context: .
+    container_name: quiz_app
+    depends_on:
+      - questions_db
+      - answers_db
+    environment:
+      QUESTIONS_DB_HOST: questions_db
+      QUESTIONS_DB_PORT: 5432
+      ANSWERS_DB_HOST: answers_db
+      ANSWERS_DB_PORT: 5432
+    command: python quiz_game.py
+
 volumes:
   questions_data:
   answers_data:
